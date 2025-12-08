@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Home | Roommate Finder</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f8;
+        margin: 0;
+    }
+    nav {
+        background: #003366;
+        display: flex;
+        justify-content: space-between;
+        padding: 14px 20px;
+        align-items: center;
+    }
+    nav a {
+        color: white;
+        text-decoration: none;
+        margin: 0 10px;
+        font-weight: bold;
+    }
+    nav a:hover {
+        text-decoration: underline;
+    }
+    h1 {
+        text-align: center;
+        color: #003366;
+        margin-top: 20px;
+    }
+
+    .profile-list {
+        max-width: 1100px;
+        margin: 30px auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        padding: 0 16px;
+    }
+    .profile-card {
+        background: #fff;
+        border-radius: 10px;
+        padding: 16px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .profile-photo {
+        width: 100%;
+        border-radius: 8px;
+        height: 180px;
+        object-fit: cover;
+        background: #e9eef8;
+    }
+    .profile-header {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
+    .profile-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    .profile-name {
+        color: #003366;
+        font-size: 1.18rem;
+        font-weight: 700;
+        margin: 0;
+    }
+    .profile-sub {
+        color: #56627a;
+        font-size: 0.95rem;
+        margin: 0;
+    }
+
+    .profile-section-title {
+        font-weight: 700;
+        color: #16325c;
+        font-size: 0.95rem;
+        margin: 8px 0 4px 0;
+    }
+
+    .profile-info {
+        color: #444;
+        font-size: 0.92rem;
+        margin: 0;
+        line-height: 1.35;
+    }
+
+    .prefs-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px 12px;
+        margin-top: 6px;
+    }
+    .pref {
+        background: #f1f6ff;
+        border-radius: 6px;
+        padding: 6px 8px;
+        font-size: 0.86rem;
+        color: #16325c;
+    }
+
+    .hobbies {
+        display:flex;
+        flex-wrap:wrap;
+        gap:8px;
+        margin-top: 6px;
+    }
+    .hobby-badge {
+        background:#fff6e6;
+        color:#7a5318;
+        padding:6px 8px;
+        border-radius:999px;
+        font-size:0.82rem;
+        border:1px solid rgba(122,83,24,0.08);
+    }
+
+    .card-footer {
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-top:8px;
+    }
+
+    .contact-btn {
+        background: #007acc;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight:600;
+    }
+    .contact-btn:hover {
+        background: #005aa4;
+    }
+
+    .small-muted {
+        font-size: 0.82rem;
+        color:#7b8795;
+    }
+
+    @media (max-width:520px){
+        .prefs-grid { grid-template-columns: 1fr; }
+    }
+</style>
+</head>
+<body>
+
+<nav>
+  <div><a href="/">Dormmate Finder</a></div>
+  <div>
+    <a href="/">Login</a>
+    <a href="/profile">Profile</a>
+    <a href="/home">Home</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </div>
+</nav>
+
+<h1 id="welcome">Dormmate Finder</h1>
+
+<section class="profile-list" id="profileList">
+  <!-- profiles injected here -->
+</section>
+
+<script>
+function logout() {
+  if (confirm("Are you sure you want to log out?")) {
+    localStorage.removeItem("username");
+    localStorage.removeItem("userProfile");
+    window.location.href = "/";
+  }
+}
+
+function safe(v, fallback = '') {
+  return (v === null || v === undefined) ? fallback : v;
+}
+
+function renderProfiles(list) {
+  const container = document.getElementById('profileList');
+  if (!Array.isArray(list) || list.length === 0) {
+    container.innerHTML = '<p style="padding:16px;color:#666;text-align:center">No profiles found.</p>';
+    return;
+  }
+
+  container.innerHTML = list.map(p => {
+    const name = safe(p.name, 'Anonymous');
+    const age = p.age ? `${p.age} yrs` : 'Age N/A';
+    const major = safe(p.major, 'Major N/A');
+    const bio = safe(p.bio, '');
+    const hobbiesStr = safe(p.hobbies, '');
+    const hobbies = hobbiesStr ? hobbiesStr.split(',').map(h => h.trim()).filter(Boolean) : [];
+    const prefs = p.preferences || {};
+
+    const prefItems = [
+      ['Sleep', prefs.sleep],
+      ['Calls', prefs.calls],
+      ['Smoking', prefs.smoke],
+      ['Drinking', prefs.alcohol],
+      ['Noise', prefs.noise],
+      ['Study env', prefs.study_env],
+      ['Scents', prefs.scents]
+    ];
+
+    const photo = safe(p.photo, 'https://randomuser.me/api/portraits/lego/1.jpg');
+
+    return `
+      <article class="profile-card" role="article" aria-labelledby="name-${p.id}">
+        <img src="${photo}" class="profile-photo" alt="Photo of ${name}">
+        <div class="profile-header">
+          <div class="profile-meta">
+            <p id="name-${p.id}" class="profile-name">${name}</p>
+            <p class="profile-sub">${major} • ${age}</p>
+          </div>
+        </div>
+
+        ${ bio ? `<div><div class="profile-section-title">About</div><p class="profile-info">${bio}</p></div>` : '' }
+
+        <div>
+          <div class="profile-section-title">Preferences</div>
+          <div class="prefs-grid">
+            ${prefItems.map(([k,v]) => `<div class="pref"><strong>${k}:</strong> ${v ? v : '—'}</div>`).join('')}
+          </div>
+        </div>
+
+        <div>
+          <div class="profile-section-title">Hobbies</div>
+          <div class="hobbies">
+            ${hobbies.length ? hobbies.map(h => `<span class="hobby-badge">${h}</span>`).join('') : '<span class="small-muted">No hobbies listed</span>'}
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <div class="small-muted">Profile ID: ${p.id}</div>
+          <button class="contact-btn" onclick="contactProfile(${p.id}, '${name.replace(/'/g, "\\'")}')">Contact</button>
+        </div>
+      </article>
+    `;
+  }).join('');
+}
+
+function contactProfile(id, name) {
+  alert(`Contact request sent to ${name} (profile id ${id})`);
+}
+
+window.addEventListener('load', () => {
+  try {
+    const user = JSON.parse(localStorage.getItem('userProfile') || 'null');
+    document.getElementById('welcome').innerText = user ? `Welcome, ${user.name}!` : 'Roommate Finder';
+  } catch (e) {
+    document.getElementById('welcome').innerText = 'Roommate Finder';
+  }
+
+  fetch('/profiles')
+    .then(res => {
+      if (!res.ok) throw new Error('Network error');
+      return res.json();
+    })
+    .then(profiles => renderProfiles(profiles))
+    .catch(err => {
+      document.getElementById('profileList').innerHTML = '<p style="padding:16px;color:#666;text-align:center">Failed to load profiles.</p>';
+      console.error('Failed to load profiles:', err);
+    });
+});
+</script>
+
+</body>
+</html>

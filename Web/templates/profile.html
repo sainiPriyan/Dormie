@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile | Roommate Finder Survey</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            background: #f5f8fb;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        nav {
+            background: #003366;
+            display: flex;
+            justify-content: space-between;
+            padding: 14px 20px;
+            align-items: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 820px;
+            background: #fff;
+            margin: 3rem auto;
+            border-radius: 14px;
+            box-shadow: 0 10px 36px rgba(46, 60, 125, 0.10);
+            padding: 42px 36px 36px 36px;
+        }
+        h1 {
+            text-align: center;
+            color: #234276;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+            font-size: 1.9rem;
+        }
+        .subtitle {
+            text-align: center;
+            color: #526b9b;
+            font-size: 1.05rem;
+            margin-bottom: 1.8rem;
+            font-style: italic;
+        }
+        .notice {
+            text-align: center;
+            background: #fff4e6;
+            border: 1px solid #ffe0b8;
+            color: #7a5318;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
+        .form-section {
+            background: #f4f7fb;
+            padding: 28px 26px;
+            border-radius: 10px;
+            box-shadow: 0 3px 14px rgba(40,60,110,0.03);
+            margin-bottom: 1.8rem;
+        }
+        .section-title { 
+            font-weight:700; 
+            color:#16325c; 
+            margin-bottom:18px; 
+            text-align:center; 
+            font-size:1.6rem; 
+            padding-bottom:6px;
+        }
+        label {
+            color: #1c305a;
+            font-size: 1.12rem;
+            margin-bottom: 12px;
+            display: block;
+        }
+        input[type="text"], input[type="number"], select, textarea {
+            padding: 10px 12px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid #b8c8df;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 22px 18px;
+            margin-bottom: 18px;
+        }
+        .radio-group label, .checkbox-group label {
+            font-weight: normal;
+            font-size: 1rem;
+            color: #37496a;
+        }
+        button[type="submit"] {
+            margin-top: 1.5rem;
+            background: linear-gradient(90deg, #326ccd, #5690fa);
+            color: #fff;
+            border: none;
+            border-radius: 7px;
+            padding: 12px 0;
+            font-size: 1.07rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button[type="submit"]:hover {
+            background: linear-gradient(90deg, #244e97, #4982e0);
+        }
+        .success-message {
+            display: none;
+            color: #30aa79;
+            text-align: center;
+            font-size: 1.11rem;
+            margin-top: 1.7rem;
+        }
+        .disabled-overlay {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+  <div><a href="/">Roommate Finder</a></div>
+  <div>
+    <a href="/">Login</a>
+    <a href="/profile">Profile</a>
+    <a href="/home">Home</a>
+    <a href="#" onclick="logout()">Logout</a>
+  </div>
+</nav>
+
+<div class="container">
+    <h1>Dorm Mate Finder Survey</h1>
+    <p class="subtitle">Please answer these questions honestly for the best results! 😊</p>
+
+    <div id="loginNotice" class="notice" style="display:none;">
+        You must be logged in to create or edit a profile. Please log in first.
+    </div>
+
+    <form id="surveyForm">
+
+        <!-- PERSONAL INFO -->
+        <div class="form-section">
+            <div class="section-title">Personal Info</div>
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" required>
+            <label for="age">Your Age</label>
+            <input type="number" id="age" name="age" min="16" max="50" required>
+            <label for="major">Your Major/Department</label>
+            <input type="text" id="major" name="major" required>
+        </div>
+
+        <!-- SCHEDULE & SLEEP -->
+        <div class="form-section">
+            <div class="section-title">Schedule & Sleep</div>
+            <label>Sleep Schedule</label>
+            <div class="radio-group">
+                <label><input type="radio" name="sleep" value="Before 10 PM" required> Before 10 PM</label>
+                <label><input type="radio" name="sleep" value="10 PM - 12 AM"> 10 PM - 12 AM</label>
+                <label><input type="radio" name="sleep" value="After 12 AM"> After 12 AM</label>
+                <label><input type="radio" name="sleep" value="Flexible"> Flexible</label>
+            </div>
+            <label>How often do you have calls/video chats?</label>
+            <div class="radio-group">
+                <label><input type="radio" name="calls" value="Often" required> Often</label>
+                <label><input type="radio" name="calls" value="Sometimes"> Sometimes</label>
+                <label><input type="radio" name="calls" value="Rarely"> Rarely</label>
+                <label><input type="radio" name="calls" value="Never"> Never</label>
+            </div>
+        </div>
+
+        <!-- CLEANLINESS & SHARING -->
+        <div class="form-section">
+            <div class="section-title">Cleanliness & Sharing</div>
+            <label>Cleanliness Level</label>
+            <select id="cleanliness" required>
+                <option value="" disabled selected>Select</option>
+                <option>Very Tidy</option>
+                <option>Somewhat Tidy</option>
+                <option>Sometimes Messy</option>
+                <option>Usually Messy</option>
+            </select>
+
+            <label>Sharing personal items</label>
+            <select id="sharing_items" required>
+                <option value="" disabled selected>Select</option>
+                <option>Happy to share</option>
+                <option>Share if asked</option>
+                <option>Only small items</option>
+                <option>Do not share</option>
+            </select>
+
+            <label>Sharing household items/groceries</label>
+            <select id="share_household" required>
+                <option value="" disabled selected>Select</option>
+                <option>Yes</option>
+                <option>Yes if split</option>
+                <option>Sometimes</option>
+                <option>No</option>
+            </select>
+        </div>
+
+        <!-- HABITS -->
+        <div class="form-section">
+            <div class="section-title">Habits & Lifestyle</div>
+            <label>Dietary Habits</label>
+            <select id="diet" required>
+                <option value="" disabled selected>Select</option>
+                <option>Vegetarian</option>
+                <option>Non-Vegetarian</option>
+                <option>Vegan</option>
+                <option>Flexible</option>
+            </select>
+
+            <label>Do you smoke?</label>
+            <div class="radio-group">
+                <label><input type="radio" name="smoke" value="No" required> No</label>
+                <label><input type="radio" name="smoke" value="Yes"> Yes</label>
+                <label><input type="radio" name="smoke" value="Occasionally"> Occasionally</label>
+                <label><input type="radio" name="smoke" value="Might want to try"> Might want to try</label>
+            </div>
+
+            <label>Do you drink?</label>
+            <div class="radio-group">
+                <label><input type="radio" name="alcohol" value="No" required> No</label>
+                <label><input type="radio" name="alcohol" value="Yes"> Yes</label>
+                <label><input type="radio" name="alcohol" value="Occasionally"> Occasionally</label>
+                <label><input type="radio" name="alcohol" value="Might want to try"> Might want to try</label>
+            </div>
+
+            <label>Frequency of visitors</label>
+            <select id="visitors" required>
+                <option value="" disabled selected>Select</option>
+                <option>Rarely</option>
+                <option>Occasionally</option>
+                <option>Frequently</option>
+                <option>Depends</option>
+            </select>
+        </div>
+
+        <!-- NOISE -->
+        <div class="form-section">
+            <div class="section-title">Noise & Study Preferences</div>
+            <label>Noise Tolerance</label>
+            <select id="noise" required>
+                <option value="" disabled selected>Select</option>
+                <option>Quiet only</option>
+                <option>Low background noise</option>
+                <option>Moderate noise</option>
+                <option>Loud noise ok</option>
+            </select>
+
+            <label>Lighting</label>
+            <select id="lighting" required>
+                <option value="" disabled selected>Select</option>
+                <option>Bright</option>
+                <option>Dim</option>
+                <option>No preference</option>
+            </select>
+
+            <label>Study Environment</label>
+            <div class="radio-group">
+                <label><input type="radio" name="study_env" value="Completely quiet" required> Completely quiet</label>
+                <label><input type="radio" name="study_env" value="Soft background music"> Soft background music</label>
+                <label><input type="radio" name="study_env" value="Doesn't matter"> Doesn’t matter</label>
+            </div>
+        </div>
+
+        <!-- ENVIRONMENT -->
+        <div class="form-section">
+            <div class="section-title">Environment & Comfort</div>
+            <label>Temperature</label>
+            <select id="temperature" required>
+                <option value="" disabled selected>Select</option>
+                <option>Cool</option>
+                <option>Moderate</option>
+                <option>Warm</option>
+                <option>No preference</option>
+            </select>
+
+            <label>Windows</label>
+            <select id="windows" required>
+                <option value="" disabled selected>Select</option>
+                <option>Open</option>
+                <option>Mostly closed</option>
+                <option>Depends on weather</option>
+                <option>No preference</option>
+            </select>
+
+            <label>Air fresheners/scents</label>
+            <div class="radio-group">
+                <label><input type="radio" name="scents" value="Love them" required> Love them</label>
+                <label><input type="radio" name="scents" value="Okay with them"> Okay with them</label>
+                <label><input type="radio" name="scents" value="Sensitive to scents"> Sensitive to scents</label>
+            </div>
+        </div>
+
+        <!-- MONEY -->
+        <div class="form-section">
+            <div class="section-title">Money & Responsibilities</div>
+            <label>How should shared expenses be split?</label>
+            <select id="split_expenses" required>
+                <option value="" disabled selected>Select</option>
+                <option>Equally</option>
+                <option>Based on usage</option>
+                <option>Rotate responsibility</option>
+                <option>Separate</option>
+            </select>
+        </div>
+
+        <!-- STRESS -->
+        <div class="form-section">
+            <div class="section-title">Stress & Personality</div>
+            <label>How do you handle stress?</label>
+            <div class="radio-group">
+                <label><input type="radio" name="stress" value="Talk to someone" required> Talk to someone</label>
+                <label><input type="radio" name="stress" value="Stay quiet / need space"> Stay quiet / need space</label>
+                <label><input type="radio" name="stress" value="Distract myself"> Distract myself</label>
+            </div>
+
+            <label>Social Type</label>
+            <div class="radio-group">
+                <label><input type="radio" name="social" value="Introvert" required> Introvert</label>
+                <label><input type="radio" name="social" value="Extrovert"> Extrovert</label>
+                <label><input type="radio" name="social" value="Ambivert"> Ambivert</label>
+            </div>
+        </div>
+
+        <!-- HOBBIES -->
+        <div class="form-section">
+            <div class="section-title">Hobbies</div>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="hobbies" value="Music"> Music</label>
+                <label><input type="checkbox" name="hobbies" value="Gaming"> Gaming</label>
+                <label><input type="checkbox" name="hobbies" value="Cooking"> Cooking</label>
+                <label><input type="checkbox" name="hobbies" value="Reading"> Reading</label>
+                <label><input type="checkbox" name="hobbies" value="Exercise"> Exercise</label>
+                <label><input type="checkbox" name="hobbies" value="Movies"> Movies</label>
+            </div>
+        </div>
+
+        <button type="submit" id="submitBtn">Submit Survey</button>
+    </form>
+
+    <div class="success-message" id="successMessage">
+        Thank you — your profile has been saved successfully.
+    </div>
+</div>
+
+<script>
+// ---- Logout ----
+function logout() {
+  if (confirm("Are you sure you want to log out?")) {
+    localStorage.removeItem("username");
+    localStorage.removeItem("userProfile");
+    window.location.href = "/";
+  }
+}
+
+// ---- Survey Script ----
+const surveyForm = document.getElementById('surveyForm');
+const successMessage = document.getElementById('successMessage');
+const loginNotice = document.getElementById('loginNotice');
+const submitBtn = document.getElementById('submitBtn');
+let currentUsername = null;
+let isEditing = false;
+
+function disableForm(disabled = true) {
+    if (disabled) {
+        surveyForm.classList.add('disabled-overlay');
+        Array.from(surveyForm.elements).forEach(el => el.disabled = true);
+    } else {
+        surveyForm.classList.remove('disabled-overlay');
+        Array.from(surveyForm.elements).forEach(el => el.disabled = false);
+    }
+}
+
+function getCheckedValues(name) {
+    return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(i => i.value);
+}
+
+function setRadioValue(name, value) {
+    if (!value) return;
+    const el = document.querySelector(`input[name="${name}"][value="${value}"]`);
+    if (el) el.checked = true;
+}
+
+function setSelectValue(id, value) {
+    if (!value) return;
+    const sel = document.getElementById(id);
+    if (sel) sel.value = value;
+}
+
+function setCheckboxValues(name, arr) {
+    if (!Array.isArray(arr)) return;
+    const inputs = document.querySelectorAll(`input[name="${name}"]`);
+    inputs.forEach(i => {
+        i.checked = arr.includes(i.value);
+    });
+}
+
+async function prefillForm(username) {
+    try {
+        const res = await fetch(`/survey/${encodeURIComponent(username)}`);
+        if (!res.ok) {
+            isEditing = false;
+            submitBtn.textContent = 'Create Profile';
+            return;
+        }
+        const data = await res.json();
+        isEditing = true;
+        submitBtn.textContent = 'Update Profile';
+        document.getElementById('name').value = data.name || '';
+        document.getElementById('age').value = data.age || '';
+        document.getElementById('major').value = data.major || '';
+        setRadioValue('sleep', data.sleep);
+        setRadioValue('calls', data.calls);
+        setSelectValue('cleanliness', data.cleanliness);
+        setSelectValue('sharing_items', data.sharing_items);
+        setSelectValue('share_household', data.share_household);
+        setSelectValue('diet', data.diet);
+        setRadioValue('smoke', data.smoke);
+        setRadioValue('alcohol', data.alcohol);
+        setSelectValue('visitors', data.visitors);
+        setSelectValue('noise', data.noise);
+        setSelectValue('lighting', data.lighting);
+        setRadioValue('study_env', data.study_env);
+        setSelectValue('temperature', data.temperature);
+        setSelectValue('windows', data.windows);
+        setRadioValue('scents', data.scents);
+        setSelectValue('split_expenses', data.split_expenses);
+        setRadioValue('stress', data.stress);
+        setRadioValue('social', data.social);
+        let hobbiesArr = [];
+        if (Array.isArray(data.hobbies)) hobbiesArr = data.hobbies;
+        else if (typeof data.hobbies === 'string' && data.hobbies.trim()) {
+            hobbiesArr = data.hobbies.split(',').map(s => s.trim()).filter(Boolean);
+        }
+        setCheckboxValues('hobbies', hobbiesArr);
+    } catch (err) {
+        console.error('Prefill failed', err);
+    }
+}
+
+window.addEventListener('load', async () => {
+    try {
+        currentUsername = localStorage.getItem('username');
+    } catch {
+        currentUsername = null;
+    }
+
+    if (!currentUsername) {
+        loginNotice.style.display = 'block';
+        disableForm(true);
+        return;
+    }
+
+    disableForm(false);
+    await prefillForm(currentUsername);
+});
+
+function buildPayload() {
+    const payload = {};
+    payload.username = currentUsername;
+    payload.name = document.getElementById('name').value.trim();
+    payload.age = document.getElementById('age').value;
+    payload.major = document.getElementById('major').value.trim();
+    payload.sleep = (document.querySelector('input[name="sleep"]:checked') || {}).value || '';
+    payload.calls = (document.querySelector('input[name="calls"]:checked') || {}).value || '';
+    payload.cleanliness = document.getElementById('cleanliness').value || '';
+    payload.sharing_items = document.getElementById('sharing_items').value || '';
+    payload.share_household = document.getElementById('share_household').value || '';
+    payload.diet = document.getElementById('diet').value || '';
+    payload.smoke = (document.querySelector('input[name="smoke"]:checked') || {}).value || '';
+    payload.alcohol = (document.querySelector('input[name="alcohol"]:checked') || {}).value || '';
+    payload.visitors = document.getElementById('visitors').value || '';
+    payload.noise = document.getElementById('noise').value || '';
+    payload.lighting = document.getElementById('lighting').value || '';
+    payload.study_env = (document.querySelector('input[name="study_env"]:checked') || {}).value || '';
+    payload.temperature = document.getElementById('temperature').value || '';
+    payload.windows = document.getElementById('windows').value || '';
+    payload.scents = (document.querySelector('input[name="scents"]:checked') || {}).value || '';
+    payload.split_expenses = document.getElementById('split_expenses').value || '';
+    payload.stress = (document.querySelector('input[name="stress"]:checked') || {}).value || '';
+    payload.social = (document.querySelector('input[name="social"]:checked') || {}).value || '';
+    payload.hobbies = getCheckedValues('hobbies');
+    return payload;
+}
+
+surveyForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    if (!currentUsername) {
+        alert('You must be logged in to submit a profile.');
+        return;
+    }
+
+    const payload = buildPayload();
+
+    if (!payload.name || !payload.age || !payload.major) {
+        alert('Please fill in name, age and major.');
+        return;
+    }
+
+    try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = isEditing ? 'Updating...' : 'Saving...';
+        const res = await fetch('/survey', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || 'Network response error');
+        }
+
+        const result = await res.json();
+        successMessage.style.display = 'block';
+        successMessage.textContent = result.message || 'Profile saved';
+        isEditing = true;
+        submitBtn.textContent = 'Update Profile';
+    } catch (error) {
+        console.error('Submit error', error);
+        alert('Submission failed. Please try again.');
+    } finally {
+        submitBtn.disabled = false;
+    }
+});
+</script>
+
+</body>
+</html>
